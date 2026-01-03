@@ -69,8 +69,8 @@ npm install
 
 Create a file named .env in the project root:
 
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/cyberguard
+PORT=5000, 
+MONGODB_URI=mongodb://localhost:27017/cyberguard, 
 JWT_SECRET=somereallylongsecretkey123
 
 
