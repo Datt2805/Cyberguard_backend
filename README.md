@@ -1,6 +1,6 @@
-🔐 Cyberguard Backend — Authentication & Assessment Service
+🔐 CyberGuard Backend — Authentication & Assessment Service
 
-Cyberguard Backend is a lightweight Node.js + Express server that provides APIs for:
+CyberGuard Backend is a lightweight Node.js + Express server that provides REST APIs for:
 
 User Signup
 
@@ -8,20 +8,22 @@ User Login / Authentication
 
 Storing Assessment Results
 
-Sending stored results to the frontend
+Sending Stored Results to the Frontend Dashboard
 
-This backend works as the auth & assessment module for the Cyberguard platform.
+This backend works as the Auth & Assessment module for the CyberGuard platform.
 
 🎯 Purpose of This Backend
 
-This project is mainly responsible for:
+This backend is mainly responsible for:
 
 ✔ Managing user accounts
-✔ Handling secure login & signup
+✔ Secure login & signup
 ✔ Saving assessment test results
-✔ Providing data to the frontend dashboard
+✔ Sharing results with the frontend dashboard
 
-It does not perform scanning — only supports authentication and result handling.
+⚠️ Note
+
+This backend does not perform scanning — it only handles authentication and result storage.
 
 🧰 Tech Stack
 
@@ -35,16 +37,22 @@ npm
 
 dotenv
 
-📂 Project Structure
+MongoDB (Local Database)
+
+## 📂 Project Structure
+
+```
 Cyberguard_backend/
 │
-├── middleware/      → Authentication / validation middleware
+├── middleware/      → Authentication & validation middleware
 ├── models/          → User & assessment result models
 ├── routes/          → Login / Signup / Result APIs
 │
 ├── index.js         → Main backend entry file
 ├── package.json
 ├── .env             → Environment variables (local only)
+```
+
 
 🚀 How to Clone & Run in VS Code
 1️⃣ Clone the Repository
@@ -57,61 +65,48 @@ code .
 3️⃣ Install Dependencies
 npm install
 
-4️⃣ Create a .env File
+🗂️ Create .env File (Required)
 
-Create a file named .env in the root folder:
+Create a file named .env in the project root:
 
 PORT=5000
+MONGODB_URI=mongodb://localhost:27017/cyberguard
+JWT_SECRET=somereallylongsecretkey123
 
 
-(Add DB URL or JWT later if used.)
+🔹 These values are for local development only
 
-5️⃣ Start the Server
-
-Normal mode:
-
+▶️ Start the Server
+Normal Mode
 npm start
 
-
-Development mode (auto reload — if nodemon added):
-
+Development Mode (if nodemon is added)
 npm run dev
 
 🌐 API Base URL
 http://localhost:5000
 
-🧾 Core APIs (High Level)
+🧾 Core APIs — High Level
 👤 Authentication APIs
 
 User Signup
 
 User Login
 
-Store user details
+Store User Details
 
 📊 Assessment Result APIs
 
-Save assessment results
+Save Assessment Results
 
-Fetch user result history
+Fetch User Result History
 
-Send results to frontend dashboard
+Send Results to Dashboard Frontend
 
-These APIs are mainly consumed by your frontend UI.
+These APIs are used by the CyberGuard Frontend UI.
 
 🛠 Useful npm Scripts
 Command	Description
 npm install	Install dependencies
 npm start	Run backend server
-npm run dev	Dev mode with nodemon (optional)
-🤝 Contribution Workflow
-
-Fork repo
-
-Create feature branch
-
-Commit changes
-
-Push branch
-
-Open Pull Request
+npm run dev	Run in dev mode (optional)
