@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const assessmentResultSchema = new mongoose.Schema({
-  // 1. ADD THIS FIELD
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
