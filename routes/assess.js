@@ -89,9 +89,8 @@ router.post('/', protect, async (req, res) => {
     const totalPercentage = maxPossibleScore > 0 ? (totalScore / maxPossibleScore) * 100 : 0;
     const overallGrade = calculateGrade(totalPercentage);
 
-    // === THIS IS THE FIX ===
     const result = await AssessmentResult.create({
-      user: req.user._id, // <--- YOU MUST HAVE THIS LINE
+      user: req.user._id,
       score: totalScore,
       total_questions: allQuestions.length,
       max_possible_score: maxPossibleScore,

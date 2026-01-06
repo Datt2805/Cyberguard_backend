@@ -6,7 +6,7 @@ const { protect } = require('../middleware/auth.js');
 
 // Utility: Generate JWT
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '12h' });
 };
 
 // POST: User Registration
