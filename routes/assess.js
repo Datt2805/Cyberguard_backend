@@ -19,7 +19,7 @@ router.post('/', protect, async (req, res) => {
     const userAnswers = req.body.answers;
     
     // Debugging Log
-    console.log("Submitting for User:", req.user ? req.user._id : "NO USER FOUND");
+    // console.log("Submitting for User:", req.user ? req.user._id : "NO USER FOUND");
 
     if (!userAnswers || !Array.isArray(userAnswers)) {
       return res.status(400).json({ error: "Invalid data format." });
@@ -89,9 +89,8 @@ router.post('/', protect, async (req, res) => {
     const totalPercentage = maxPossibleScore > 0 ? (totalScore / maxPossibleScore) * 100 : 0;
     const overallGrade = calculateGrade(totalPercentage);
 
-    // === THIS IS THE FIX ===
     const result = await AssessmentResult.create({
-      user: req.user._id, // <--- YOU MUST HAVE THIS LINE
+      user: req.user._id,
       score: totalScore,
       total_questions: allQuestions.length,
       max_possible_score: maxPossibleScore,
