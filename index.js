@@ -5,9 +5,7 @@ const cors = require('cors');
 
 const Question = require('./models/Question');
 const AssessmentResult = require('./models/AssessmentResult');
-
 const { questionsData } = require('./data/questionsData'); 
-
 const seedRoute = require('./routes/seed');
 const questionsRoute = require('./routes/questions');
 const assessRoute = require('./routes/assess');
