@@ -19,7 +19,7 @@ router.post('/', protect, async (req, res) => {
     const userAnswers = req.body.answers;
     
     // Debugging Log
-    console.log("Submitting for User:", req.user ? req.user._id : "NO USER FOUND");
+   x
 
     if (!userAnswers || !Array.isArray(userAnswers)) {
       return res.status(400).json({ error: "Invalid data format." });

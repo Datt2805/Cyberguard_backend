@@ -24,9 +24,9 @@ async function initDatabase() {
 
   if (qCount === 0) {
     await Question.insertMany(questionsData);
-    console.log("✔ Questions seeded automatically");
+    console.log("Questions seeded automatically");
   } else {
-    console.log("✔ Questions already exist — skipping seed");
+    console.log("Questions already exist — skipping seed");
   }
 }
 
