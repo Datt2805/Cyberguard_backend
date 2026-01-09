@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: "Please fill all fields" });
         }
 
-        const userFound = await User.findOne({ email });
+        const userFound = await User.findOne({ email }).select("+password");
 
         if (userFound && (await userFound.matchPassword(password))) {
             res.status(200).json({

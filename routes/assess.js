@@ -3,6 +3,7 @@ const router = express.Router();
 const Question = require("../models/Question");
 const AssessmentResult = require("../models/AssessmentResult");
 const { protect } = require("../middleware/auth");
+const generateAssessmentPDF = require("../utils/generateAssessmentPDF");
 
 // Grade calculator
 const calculateGrade = (percentage) => {
@@ -13,10 +14,42 @@ const calculateGrade = (percentage) => {
   return "F";
 };
 
-/**
- * POST /api/assess
- * Submit assessment answers
- */
+// Grade → Risk
+const mapGradeToRisk = (grade) => {
+  switch (grade) {
+    case "A":
+      return "Secure";
+    case "B":
+      return "Low";
+    case "C":
+      return "Medium";
+    case "D":
+      return "High";
+    case "F":
+      return "Critical";
+    default:
+      return "Unknown";
+  }
+};
+
+// Risk → Color
+const mapRiskToColor = (risk) => {
+  switch (risk) {
+    case "Secure":
+    case "Low":
+      return "green";
+    case "Medium":
+      return "yellow";
+    case "High":
+    case "Critical":
+      return "red";
+    default:
+      return "gray";
+  }
+};
+
+//  SUBMIT ASSESSMENT
+
 router.post("/", protect, async (req, res) => {
   try {
     const { answers } = req.body;
@@ -25,7 +58,6 @@ router.post("/", protect, async (req, res) => {
       return res.status(400).json({ error: "Invalid answers payload" });
     }
 
-    // Fetch all questions once
     const questions = await Question.find({});
     if (!questions.length) {
       return res.status(500).json({ error: "No questions found" });
@@ -38,16 +70,14 @@ router.post("/", protect, async (req, res) => {
     const categoryTracker = {};
     const processedAnswers = [];
 
-    // Pre-calc max scores
     questions.forEach((q) => {
       if (!categoryTracker[q.category_name]) {
         categoryTracker[q.category_name] = { score: 0, max: 0 };
       }
-      categoryTracker[q.category_name].max += 3; // max per question
+      categoryTracker[q.category_name].max += 3;
       maxPossibleScore += 3;
     });
 
-    // Process submitted answers
     for (const ans of answers) {
       const question = questionMap.get(ans.questionId);
       if (!question) continue;
@@ -61,7 +91,6 @@ router.post("/", protect, async (req, res) => {
       processedAnswers.push({
         questionId: question._id,
         questionText: question.question_text,
-
         selectedOption: selectedOption
           ? {
               option_key: selectedOption.option_key,
@@ -69,37 +98,45 @@ router.post("/", protect, async (req, res) => {
               score: selectedOption.score,
             }
           : null,
-
         pointsAwarded: points,
         quotation: ans.quotation || null,
       });
     }
 
-    // Build category scores
+    //  CATEGORY SCORES
+
     const categoryScores = Object.entries(categoryTracker).map(
       ([name, data]) => {
         const percentage =
           data.max > 0 ? Math.round((data.score / data.max) * 100) : 0;
+
+        const grade = calculateGrade(percentage);
+        const risk = mapGradeToRisk(grade);
+        const color = mapRiskToColor(risk);
 
         return {
           category_name: name,
           score: data.score,
           max_score: data.max,
           percentage,
-          risk: calculateGrade(percentage),
+          grade,
+          risk,
+          color,
         };
       }
     );
 
-    // Overall percentage
+    //  OVERALL SUMMARY
+
     const overallPercentage =
       maxPossibleScore > 0
         ? Math.round((totalScore / maxPossibleScore) * 100)
         : 0;
 
     const overallGrade = calculateGrade(overallPercentage);
+    const overallRisk = mapGradeToRisk(overallGrade);
+    const overallColor = mapRiskToColor(overallRisk);
 
-    // SAVE USING NEW SCHEMA
     const result = await AssessmentResult.create({
       user: req.user._id,
 
@@ -108,7 +145,10 @@ router.post("/", protect, async (req, res) => {
         total_questions: questions.length,
         max_possible_score: maxPossibleScore,
         percentage: overallPercentage,
-        risk_level: overallGrade,
+
+        grade: overallGrade,
+        risk_level: overallRisk,
+        risk_color: overallColor,
       },
 
       category_scores: categoryScores,
@@ -126,7 +166,8 @@ router.post("/", protect, async (req, res) => {
   }
 });
 
-// GET /api/assess/history Fetch user assessment history
+//  HISTORY
+
 router.get("/history", protect, async (req, res) => {
   try {
     const history = await AssessmentResult.find({ user: req.user._id })
@@ -137,6 +178,23 @@ router.get("/history", protect, async (req, res) => {
   } catch (err) {
     console.error("FETCH HISTORY ERROR:", err);
     res.status(500).json({ error: "Failed to fetch history" });
+  }
+});
+
+//  PDF DOWNLOAD
+
+router.get("/:id/download", protect, async (req, res) => {
+  try {
+    const assessment = await AssessmentResult.findById(req.params.id);
+
+    if (!assessment) {
+      return res.status(404).json({ message: "Assessment not found" });
+    }
+
+    generateAssessmentPDF(assessment, res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to generate PDF" });
   }
 });
 

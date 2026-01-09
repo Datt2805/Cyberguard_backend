@@ -42,15 +42,31 @@ MongoDB (Local Database)
 ## 📂 Project Structure
 
 ```
-Cyberguard_backend/
+cyberguard_backend/
 │
-├── middleware/      → Authentication & validation middleware
-├── models/          → User & assessment result models
-├── routes/          → Login / Signup / Result APIs
+├── data/
+│   └── questionsData.js        # Static assessment questions
 │
-├── index.js         → Main backend entry file
+├── middleware/
+│   └── auth.js                 # JWT authentication middleware
+│
+├── models/
+│   ├── AssessmentResult.js     # Stores user assessment results
+│   ├── Question.js             # Assessment questions schema
+│   └── user.js                 # User schema
+│
+├── routes/
+│   ├── assess.js               # Assessment submission & scoring
+│   ├── auth.js                 # Login & register routes
+│   ├── questions.js            # Fetch assessment questions
+│   └── seed.js                 # Seed questions into database
+│
+├── .env                        # Environment variables
+├── .gitignore
+├── index.js                    # Application entry point
 ├── package.json
-├── .env             → Environment variables (local only)
+├── package-lock.json
+└── README.md
 ```
 
 
@@ -69,8 +85,8 @@ npm install
 
 Create a file named .env in the project root:
 
-PORT=5000, 
-MONGODB_URI=mongodb://localhost:27017/cyberguard, 
+PORT=5000 
+MONGODB_URI=mongodb://localhost:27017/cyberguard
 JWT_SECRET=somereallylongsecretkey123
 
 
