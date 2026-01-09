@@ -13,7 +13,9 @@ const assessmentResultSchema = new mongoose.Schema(
       total_questions: Number,
       max_possible_score: Number,
       percentage: Number,
+      grade: String,
       risk_level: String,
+      risk_color: String,
     },
     category_scores: [
       {
@@ -21,7 +23,9 @@ const assessmentResultSchema = new mongoose.Schema(
         score: Number,
         max_score: Number,
         percentage: Number,
+        grade: String,
         risk: String,
+        color: String,
       },
     ],
     answers: [
