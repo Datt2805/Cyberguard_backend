@@ -44,6 +44,10 @@ app.get('/', (req, res) => {
   res.send('CyberGuard Backend is Running');
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
