@@ -59,7 +59,10 @@ cyberguard_backend/
 │   ├── assess.js               # Assessment submission & scoring
 │   ├── auth.js                 # Login & register routes
 │   ├── questions.js            # Fetch assessment questions
-│   └── seed.js                 # Seed questions into database
+│   └── seed.js 
+│ 
+├── utils/
+│   └── generateAssessmentPDF.js  # Generate assessment PDF
 │
 ├── .env                        # Environment variables
 ├── .gitignore
