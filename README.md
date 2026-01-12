@@ -59,7 +59,10 @@ cyberguard_backend/
 │   ├── assess.js               # Assessment submission & scoring
 │   ├── auth.js                 # Login & register routes
 │   ├── questions.js            # Fetch assessment questions
-│   └── seed.js                 # Seed questions into database
+│   └── seed.js 
+│ 
+├── utils/
+│   └── generateAssessmentPDF.js  # Generate assessment PDF
 │
 ├── .env                        # Environment variables
 ├── .gitignore
@@ -85,9 +88,11 @@ npm install
 
 Create a file named .env in the project root:
 
-PORT=5000 
-MONGODB_URI=mongodb://localhost:27017/cyberguard
-JWT_SECRET=somereallylongsecretkey123
+PORT=5000,
+MONGODB_URI=mongodb+srv://cyberguard_user:78q9SGKUG2Gn4jyZ@cluster0.luvo6jl.mongodb.net/,
+//mongodb://localhost:27017/cyberguard,
+JWT_SECRET=somereallylongsecretkey123,
+NODE_ENV=production
 
 
 🔹 These values are for local development only
@@ -125,4 +130,5 @@ These APIs are used by the CyberGuard Frontend UI.
 Command	Description
 npm install	Install dependencies
 npm start	Run backend server
+
 npm run dev	Run in dev mode (optional)
