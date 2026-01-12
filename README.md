@@ -85,10 +85,10 @@ npm install
 
 Create a file named .env in the project root:
 
-PORT=5000
-MONGODB_URI=mongodb+srv://cyberguard_user:78q9SGKUG2Gn4jyZ@cluster0.luvo6jl.mongodb.net/
-# mongodb://localhost:27017/cyberguard
-JWT_SECRET=somereallylongsecretkey123
+PORT=5000,
+MONGODB_URI=mongodb+srv://cyberguard_user:78q9SGKUG2Gn4jyZ@cluster0.luvo6jl.mongodb.net/,
+//mongodb://localhost:27017/cyberguard,
+JWT_SECRET=somereallylongsecretkey123,
 NODE_ENV=production
 
 
@@ -127,4 +127,5 @@ These APIs are used by the CyberGuard Frontend UI.
 Command	Description
 npm install	Install dependencies
 npm start	Run backend server
+
 npm run dev	Run in dev mode (optional)
